@@ -54,7 +54,6 @@ class Response {
         $this->_responseData['success'] = $this->_success;
         $this->_responseData['messages'] = $this->_messages;
         $this->_responseData['data'] = $this->_data;
-
     }
     echo json_encode($this->_responseData); 
     }
