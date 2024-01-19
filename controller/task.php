@@ -233,7 +233,6 @@ if(array_key_exists("taskid",$_GET)) {
 
         $query->bindParam(':taskid', $taskid, PDO::PARAM_STR);
         $query->execute();
-        //print_r($query->errorInfo());
 
         $rowCount = $query->rowCount();
 
@@ -249,10 +248,8 @@ if(array_key_exists("taskid",$_GET)) {
         $query = $writeDB->prepare('select id, title, description, DATE_FORMAT(deadline, "%Y-%m-%d %H:%i:%s") as deadline, completed from tbltasks where id =:taskid');
         $query->bindParam(':taskid', $taskid, PDO::PARAM_INT);
         $query->execute();
-        //print_r($query->errorInfo());
 
         $rowCount = $query->rowCount();
-        //echo "Rows returned: " . $rowCount;
         if($rowCount === 0){
             $response = new Response();
             $response->setHttpStatusCode(404);
