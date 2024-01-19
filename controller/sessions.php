@@ -18,7 +18,44 @@ try {
 }
 
 if(array_key_exists("sessionid", $_GET)) {
+    $session_id  = $_GET['sessionid'];
 
+    try {
+        $query = $writeDB->prepare('delete from tblsessions where id = :sessionid');
+        $query->bindParam(':sessionid', $session_id, PDO::PARAM_INT);
+        $query->execute();
+
+        $rowCount = $query->rowCount();
+
+        if($rowCount === 0 ) {
+            $response = new Response();
+            $response->setHttpStatusCode(404);
+            $response->setSuccess(false);
+            $response->addMessage("No session found");
+            $response->send();
+            exit();
+        }
+
+        $response = new Response();
+        $response->setHttpStatusCode(200);
+        $response->setSuccess(true);
+        $response->addMessage("Session deleted");
+        $response->send();
+        exit();
+        
+    } 
+    
+    catch (PDOException $ex) {
+        $logFilePath = 'C:/xampp/logs/error.log';
+        error_log("Database error".$ex->getMessage(), 3, $logFilePath);
+        $response = new Response();
+        $response->setHttpStatusCode(500);
+        $response->setSuccess(false);
+        $response->addMessage("Failed to delete the session");
+        $response->send();
+        exit();
+    
+    }
 }
 elseif (empty($_GET)) {
     if($_SERVER['REQUEST_METHOD'] !== 'POST'){
